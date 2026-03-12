@@ -43,7 +43,6 @@ export default function Login() {
     return (
         <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
             <div className="w-full max-w-sm">
-                {/* Brand */}
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 border border-primary/30 mb-4">
                         <Wind className="text-primary" size={28} />
@@ -54,10 +53,8 @@ export default function Login() {
                     <p className="text-base-content/40 text-xs mt-1 font-mono">Operation Center</p>
                 </div>
 
-                {/* Card */}
                 <div className="card bg-base-100 shadow-xl">
                     <div className="card-body gap-4">
-                        {/* Tab switcher */}
                         <div className="tabs tabs-boxed bg-base-200">
                             {(["login", "register"] as const).map(m => (
                                 <button key={m} onClick={() => setMode(m)}

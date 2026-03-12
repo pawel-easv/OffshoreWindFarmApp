@@ -1,4 +1,3 @@
-// TurbineCard.tsx
 import type { TurbineTelemetry } from "../../generated-ts-client.ts";
 import { Wind, Zap, Thermometer, Activity, AlertTriangle } from "lucide-react";
 

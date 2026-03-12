@@ -1,0 +1,18 @@
+# flyctl launch added from .idea/.idea.WindmillApp.dir/.idea/.gitignore
+# Default ignored files
+.idea/.idea.WindmillApp.dir/.idea/shelf
+.idea/.idea.WindmillApp.dir/.idea/workspace.xml
+# Rider ignored files
+.idea/.idea.WindmillApp.dir/.idea/.idea.WindmillApp.iml
+.idea/.idea.WindmillApp.dir/.idea/modules.xml
+.idea/.idea.WindmillApp.dir/.idea/contentModel.xml
+.idea/.idea.WindmillApp.dir/.idea/projectSettingsUpdater.xml
+# Ignored default folder with query files
+.idea/.idea.WindmillApp.dir/.idea/queries
+# Datasource local storage ignored files
+.idea/.idea.WindmillApp.dir/.idea/dataSources
+.idea/.idea.WindmillApp.dir/.idea/dataSources.local.xml
+# Editor-based HTTP Client requests
+.idea/.idea.WindmillApp.dir/.idea/httpRequests
+fly.toml
+**/appsettings.Development.json

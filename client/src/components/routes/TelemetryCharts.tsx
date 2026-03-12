@@ -12,15 +12,14 @@ interface Props {
     loading:     boolean;
 }
 
-// Matched to DaisyUI theme colors used in MetricsCards
 const COLORS = {
-    power:   "#f59e0b", // warning  — Power Output
-    wind:    "#06b6d4", // info     — Wind Speed
-    rpm:     "#a855f7", // secondary — Rotor RPM (approximate, DaisyUI secondary)
-    pitch:   "#6366f1", // primary  — Blade Pitch (approximate, DaisyUI primary)
-    temp:    "#f59e0b", // warning  — Generator/Gearbox temp
-    tempGen: "#fde68a", // warning lighter
-    vibe:    "#22c55e", // success  — Vibration (green when ok)
+    power:   "#f59e0b",
+    wind:    "#06b6d4",
+    rpm:     "#a855f7",
+    pitch:   "#6366f1",
+    temp:    "#f59e0b",
+    tempGen: "#fde68a",
+    vibe:    "#22c55e",
 };
 
 const tick    = { fill: "#64748b", fontSize: 9, fontFamily: "monospace" };

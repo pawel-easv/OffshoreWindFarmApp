@@ -342,6 +342,39 @@
         }
       }
     },
+    "/GetAlerts": {
+      "get": {
+        "tags": [
+          "WebClient"
+        ],
+        "operationId": "WebClient_GetAlerts",
+        "parameters": [
+          {
+            "name": "turbineId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TurbineAlert"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/sse": {
       "get": {
         "tags": [
