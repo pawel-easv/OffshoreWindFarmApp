@@ -1,4 +1,4 @@
-# Dead Pigeons Lottery System
+# Offshore Wind Farm App
 
 ## About The Project
 
