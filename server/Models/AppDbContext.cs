@@ -38,7 +38,7 @@ public partial class AppDbContext : DbContext
 
             entity.ToTable("operator_commands");
 
-            entity.HasIndex(e => new { e.Turbine, e.ExecutedAt }, "idx_commands_turbine").IsDescending(false, true);
+            entity.HasIndex(e => new { e.TurbineId, e.ExecutedAt }, "idx_commands_turbine").IsDescending(false, true);
 
             entity.HasIndex(e => new { e.UserId, e.ExecutedAt }, "idx_commands_user").IsDescending(false, true);
 
@@ -52,9 +52,14 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("executed_at");
             entity.Property(e => e.IntervalValue).HasColumnName("interval_value");
             entity.Property(e => e.Reason).HasColumnName("reason");
-            entity.Property(e => e.Turbine).HasColumnName("turbine");
+            entity.Property(e => e.TurbineId).HasColumnName("turbine_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
-            
+
+            entity.HasOne(d => d.Turbine).WithMany(p => p.OperatorCommands)
+                .HasForeignKey(d => d.TurbineId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("operator_commands_turbine_id_fkey");
+
             entity.HasOne(d => d.User).WithMany(p => p.OperatorCommands)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)

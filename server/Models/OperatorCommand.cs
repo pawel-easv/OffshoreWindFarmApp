@@ -7,7 +7,7 @@ public partial class OperatorCommand
 {
     public Guid Id { get; set; }
 
-    public string Turbine { get; set; } = null!;
+    public string TurbineId { get; set; } = null!;
 
     public Guid UserId { get; set; }
 
@@ -20,6 +20,8 @@ public partial class OperatorCommand
     public int? IntervalValue { get; set; }
 
     public DateTime ExecutedAt { get; set; }
+
+    public virtual Turbine Turbine { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
 }

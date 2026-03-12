@@ -122,6 +122,61 @@
         }
       }
     },
+    "/SimulateAlert": {
+      "post": {
+        "tags": [
+          "WebClient"
+        ],
+        "operationId": "WebClient_SimulateAlert",
+        "parameters": [
+          {
+            "name": "turbineId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/SetBladePitch": {
+      "get": {
+        "tags": [
+          "WebClient"
+        ],
+        "operationId": "WebClient_SetBladePitch",
+        "parameters": [
+          {
+            "name": "turbineId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "angle",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/StopTurbine": {
       "get": {
         "tags": [
@@ -177,12 +232,42 @@
         }
       }
     },
-    "/SetBladePitch": {
+    "/GetTelemetry": {
       "get": {
         "tags": [
           "WebClient"
         ],
-        "operationId": "WebClient_SetBladePitch",
+        "operationId": "WebClient_GetTelemetry",
+        "parameters": [
+          {
+            "name": "connectionId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealtimeListenResponseOfListOfTurbineTelemetry"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GetTelemetryHistory": {
+      "get": {
+        "tags": [
+          "WebClient"
+        ],
+        "operationId": "WebClient_GetTelemetryHistory",
         "parameters": [
           {
             "name": "turbineId",
@@ -193,18 +278,66 @@
             "x-position": 1
           },
           {
-            "name": "angle",
+            "name": "timeframe",
             "in": "query",
             "schema": {
-              "type": "number",
-              "format": "double"
+              "type": "string",
+              "default": "1h"
             },
             "x-position": 2
           }
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TurbineTelemetry"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GetTurbineTelemetryLive": {
+      "get": {
+        "tags": [
+          "WebClient"
+        ],
+        "operationId": "WebClient_GetTurbineTelemetryLive",
+        "parameters": [
+          {
+            "name": "connectionId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "turbineId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealtimeListenResponseOfListOfTurbineTelemetry"
+                }
+              }
+            }
           }
         }
       }
@@ -311,7 +444,7 @@
             "type": "string",
             "format": "guid"
           },
-          "turbine": {
+          "turbineId": {
             "type": "string"
           },
           "userId": {
@@ -339,8 +472,183 @@
             "type": "string",
             "format": "date-time"
           },
+          "turbine": {
+            "$ref": "#/components/schemas/Turbine"
+          },
           "user": {
             "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "Turbine": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "farmId": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "operatorCommands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperatorCommand"
+            }
+          },
+          "turbineAlerts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TurbineAlert"
+            }
+          },
+          "turbineTelemetries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TurbineTelemetry"
+            }
+          }
+        }
+      },
+      "TurbineAlert": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "turbineId": {
+            "type": "string"
+          },
+          "farmId": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "turbine": {
+            "$ref": "#/components/schemas/Turbine"
+          }
+        }
+      },
+      "TurbineTelemetry": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "turbineId": {
+            "type": "string"
+          },
+          "farmId": {
+            "type": "string"
+          },
+          "windSpeed": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "windDirection": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "ambientTemperature": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rotorSpeed": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "powerOutput": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "nacelleDirection": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "bladePitch": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "generatorTemp": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "gearboxTemp": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "vibration": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "turbine": {
+            "$ref": "#/components/schemas/Turbine"
+          }
+        }
+      },
+      "RealtimeListenResponseOfListOfTurbineTelemetry": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RealtimeListenResponse"
+          },
+          {
+            "type": "object",
+            "description": "Returned by subscribe endpoints with initial data. The client receives the current state\nimmediately and knows which SSE group to listen on for subsequent updates.",
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/TurbineTelemetry"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RealtimeListenResponse": {
+        "type": "object",
+        "description": "Returned by subscribe endpoints so the client knows which SSE group to listen on.",
+        "additionalProperties": false,
+        "properties": {
+          "group": {
+            "type": "string"
           }
         }
       }

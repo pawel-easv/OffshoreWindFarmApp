@@ -27,11 +27,27 @@ configuration.GetSection(nameof(ConnectionStrings)).Bind(connectionStrings);
 builder.Services.AddSingleton(connectionStrings);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(o => o.TokenValidationParameters = new TokenValidationParameters
+    .AddJwtBearer(o =>
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(connectionStrings.Secret))
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(connectionStrings.Secret))
+        };
+        o.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"].ToString();
+                if (!string.IsNullOrEmpty(accessToken) && 
+                    context.Request.Path.StartsWithSegments("/sse"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 builder.Services.AddAuthorization(options =>
 {
@@ -94,19 +110,28 @@ builder.Services.AddControllers()
     });
 builder.Services.AddCors();
 builder.Services.AddScoped<Seeder>();
+builder.Services.AddScoped<WindmillService>();
 
 var app = builder.Build();
 app.UseExceptionHandler();
 app.UseOpenApi();
 app.UseSwaggerUi();
+app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/sse"))
+    {
+        var token = context.Request.Query["access_token"].ToString();
+        if (!string.IsNullOrEmpty(token))
+            context.Request.Headers.Authorization = $"Bearer {token}";
+    }
+    await next();
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseCors(c => 
-    c.AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowAnyOrigin()
-        .SetIsOriginAllowed(_ => true));
+
 
 
  var mqttClient = app.Services.GetRequiredService<IMqttClientService>();

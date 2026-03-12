@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+.nav-btn {
+    @apply relative flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs transition-all cursor-pointer border-0 bg-transparent font-mono;
+}
+.nav-btn-active {
+    @apply bg-base-300 text-base-content;
+}
+.nav-btn-inactive {
+    @apply text-base-content/40 hover:text-base-content hover:bg-base-200;
+}
+
+.stat-card {
+    @apply rounded-xl border border-base-300 bg-base-100 p-3 font-mono;
+}
+
+.turbine-card {
+    @apply bg-base-100 border border-base-300 rounded-xl p-4 font-mono cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-base-200 text-left w-full;
+}
+.turbine-card-selected {
+    @apply bg-primary/10 border-primary/60 shadow-lg;
+}
+
+.control-panel {
+    @apply bg-base-100 border border-base-300 rounded-xl p-4 font-mono space-y-5;
+}
+
+.alert-row {
+    @apply flex items-start gap-3 px-4 py-3 border-b border-base-300 border-l-4 transition-all;
+}
+.alert-critical { @apply border-l-error  bg-error/5; }
+.alert-warning  { @apply border-l-warning bg-warning/5; }
+.alert-info     { @apply border-l-info   bg-info/5; }
+
+.chart-card {
+    @apply bg-base-100 border border-base-300 rounded-xl p-4;
+}
+
+.status-running     { @apply bg-success/15 border border-success/40 text-success; }
+.status-stopped     { @apply bg-base-300/40 border border-base-300  text-base-content/50; }
+.status-fault       { @apply bg-error/15   border border-error/40   text-error; }
+.status-maintenance { @apply bg-warning/15 border border-warning/40 text-warning; }

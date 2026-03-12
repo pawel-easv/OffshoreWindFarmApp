@@ -173,6 +173,78 @@ export class WebClientClient {
         return Promise.resolve<void>(null as any);
     }
 
+    simulateAlert(turbineId: string | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/SimulateAlert?";
+        if (turbineId === null)
+            throw new globalThis.Error("The parameter 'turbineId' cannot be null.");
+        else if (turbineId !== undefined)
+            url_ += "turbineId=" + encodeURIComponent("" + turbineId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processSimulateAlert(_response);
+        });
+    }
+
+    protected processSimulateAlert(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    setBladePitch(turbineId: string | undefined, angle: number | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/SetBladePitch?";
+        if (turbineId === null)
+            throw new globalThis.Error("The parameter 'turbineId' cannot be null.");
+        else if (turbineId !== undefined)
+            url_ += "turbineId=" + encodeURIComponent("" + turbineId) + "&";
+        if (angle === null)
+            throw new globalThis.Error("The parameter 'angle' cannot be null.");
+        else if (angle !== undefined)
+            url_ += "angle=" + encodeURIComponent("" + angle) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processSetBladePitch(_response);
+        });
+    }
+
+    protected processSetBladePitch(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
     stopTurbine(turbineId: string | undefined, reason: string | null | undefined): Promise<void> {
         let url_ = this.baseUrl + "/StopTurbine?";
         if (turbineId === null)
@@ -243,42 +315,160 @@ export class WebClientClient {
         return Promise.resolve<void>(null as any);
     }
 
-    setBladePitch(turbineId: string | undefined, angle: number | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/SetBladePitch?";
-        if (turbineId === null)
-            throw new globalThis.Error("The parameter 'turbineId' cannot be null.");
-        else if (turbineId !== undefined)
-            url_ += "turbineId=" + encodeURIComponent("" + turbineId) + "&";
-        if (angle === null)
-            throw new globalThis.Error("The parameter 'angle' cannot be null.");
-        else if (angle !== undefined)
-            url_ += "angle=" + encodeURIComponent("" + angle) + "&";
+    getTelemetry(connectionId: string | undefined): Promise<RealtimeListenResponseOfListOfTurbineTelemetry> {
+        let url_ = this.baseUrl + "/GetTelemetry?";
+        if (connectionId === null)
+            throw new globalThis.Error("The parameter 'connectionId' cannot be null.");
+        else if (connectionId !== undefined)
+            url_ += "connectionId=" + encodeURIComponent("" + connectionId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processSetBladePitch(_response);
+            return this.processGetTelemetry(_response);
         });
     }
 
-    protected processSetBladePitch(response: Response): Promise<void> {
+    protected processGetTelemetry(response: Response): Promise<RealtimeListenResponseOfListOfTurbineTelemetry> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as RealtimeListenResponseOfListOfTurbineTelemetry;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<RealtimeListenResponseOfListOfTurbineTelemetry>(null as any);
+    }
+
+    getTelemetryHistory(turbineId: string | undefined, timeframe: string | undefined): Promise<TurbineTelemetry[]> {
+        let url_ = this.baseUrl + "/GetTelemetryHistory?";
+        if (turbineId === null)
+            throw new globalThis.Error("The parameter 'turbineId' cannot be null.");
+        else if (turbineId !== undefined)
+            url_ += "turbineId=" + encodeURIComponent("" + turbineId) + "&";
+        if (timeframe === null)
+            throw new globalThis.Error("The parameter 'timeframe' cannot be null.");
+        else if (timeframe !== undefined)
+            url_ += "timeframe=" + encodeURIComponent("" + timeframe) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetTelemetryHistory(_response);
+        });
+    }
+
+    protected processGetTelemetryHistory(response: Response): Promise<TurbineTelemetry[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TurbineTelemetry[];
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<TurbineTelemetry[]>(null as any);
+    }
+
+    getTurbineTelemetryLive(connectionId: string | undefined, turbineId: string | undefined): Promise<RealtimeListenResponseOfListOfTurbineTelemetry> {
+        let url_ = this.baseUrl + "/GetTurbineTelemetryLive?";
+        if (connectionId === null)
+            throw new globalThis.Error("The parameter 'connectionId' cannot be null.");
+        else if (connectionId !== undefined)
+            url_ += "connectionId=" + encodeURIComponent("" + connectionId) + "&";
+        if (turbineId === null)
+            throw new globalThis.Error("The parameter 'turbineId' cannot be null.");
+        else if (turbineId !== undefined)
+            url_ += "turbineId=" + encodeURIComponent("" + turbineId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetTurbineTelemetryLive(_response);
+        });
+    }
+
+    protected processGetTurbineTelemetryLive(response: Response): Promise<RealtimeListenResponseOfListOfTurbineTelemetry> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as RealtimeListenResponseOfListOfTurbineTelemetry;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<RealtimeListenResponseOfListOfTurbineTelemetry>(null as any);
+    }
+
+    getAlerts(turbineId: string | undefined): Promise<TurbineAlert[]> {
+        let url_ = this.baseUrl + "/GetAlerts?";
+        if (turbineId === null)
+            throw new globalThis.Error("The parameter 'turbineId' cannot be null.");
+        else if (turbineId !== undefined)
+            url_ += "turbineId=" + encodeURIComponent("" + turbineId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAlerts(_response);
+        });
+    }
+
+    protected processGetAlerts(response: Response): Promise<TurbineAlert[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TurbineAlert[];
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<TurbineAlert[]>(null as any);
     }
 
     connect(): Promise<void> {
@@ -342,14 +532,64 @@ export interface User {
 
 export interface OperatorCommand {
     id?: string;
-    turbine?: string;
+    turbineId?: string;
     userId?: string;
     action?: string;
     reason?: string | undefined;
     angle?: number | undefined;
     intervalValue?: number | undefined;
     executedAt?: string;
+    turbine?: Turbine;
     user?: User;
+}
+
+export interface Turbine {
+    id?: string;
+    name?: string;
+    farmId?: string;
+    location?: string;
+    operatorCommands?: OperatorCommand[];
+    turbineAlerts?: TurbineAlert[];
+    turbineTelemetries?: TurbineTelemetry[];
+}
+
+export interface TurbineAlert {
+    id?: string;
+    turbineId?: string;
+    farmId?: string;
+    severity?: string;
+    message?: string;
+    timestamp?: string;
+    turbine?: Turbine;
+}
+
+export interface TurbineTelemetry {
+    id?: string;
+    turbineId?: string;
+    farmId?: string;
+    windSpeed?: number | undefined;
+    windDirection?: number | undefined;
+    ambientTemperature?: number | undefined;
+    rotorSpeed?: number | undefined;
+    powerOutput?: number | undefined;
+    nacelleDirection?: number | undefined;
+    bladePitch?: number | undefined;
+    generatorTemp?: number | undefined;
+    gearboxTemp?: number | undefined;
+    vibration?: number | undefined;
+    status?: string;
+    timestamp?: string;
+    turbine?: Turbine;
+}
+
+/** Returned by subscribe endpoints so the client knows which SSE group to listen on. */
+export interface RealtimeListenResponse {
+    group?: string;
+}
+
+/** Returned by subscribe endpoints with initial data. The client receives the current state immediately and knows which SSE group to listen on for subsequent updates. */
+export interface RealtimeListenResponseOfListOfTurbineTelemetry extends RealtimeListenResponse {
+    data?: TurbineTelemetry[] | undefined;
 }
 
 export class ApiException extends Error {
