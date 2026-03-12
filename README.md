@@ -25,8 +25,8 @@ execute commands that impact the windmills.
 
 #### 1. Clone the Repository
 ```bash
-git clone https://github.com/pawel-easv/DeadPigeons
-cd DeadPigeons
+git clone https://github.com/pawel-easv/OffshoreWindFarmApp
+cd OffshoreWindFarmApp
 ```
 
 #### 2. Backend Setup
